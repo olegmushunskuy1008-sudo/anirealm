@@ -3,65 +3,55 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Anime Room</title>
+<title>AniTalk Room</title>
 
 <style>
 body {
-  margin: 0;
+  margin:0;
   font-family: Arial;
-  background: #0a0a0f;
-  color: white;
+  background:#0a0a0f;
+  color:white;
 }
 
 header {
-  padding: 20px;
-  text-align: center;
-  color: #00fff7;
-  font-size: 24px;
-  border-bottom: 1px solid #222;
+  padding:20px;
+  text-align:center;
+  color:#00fff7;
+  border-bottom:1px solid #222;
 }
 
-.chat {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 10px;
+.container {
+  max-width:700px;
+  margin:auto;
+  padding:20px;
 }
 
-.messages {
-  height: 400px;
-  overflow-y: auto;
-  border: 1px solid #333;
-  padding: 10px;
-  border-radius: 10px;
-  background: #111;
-}
-
-.msg {
-  padding: 8px;
-  margin: 5px 0;
-  background: #1a1a1a;
-  border-radius: 8px;
-}
-
-.input-box {
-  display: flex;
-  margin-top: 10px;
+.post-box {
+  display:flex;
+  gap:10px;
 }
 
 input {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:8px;
 }
 
 button {
-  margin-left: 10px;
-  padding: 10px 15px;
-  border: none;
-  background: #00fff7;
-  cursor: pointer;
-  border-radius: 8px;
+  padding:10px 15px;
+  border:none;
+  background:#ff00cc;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.post {
+  background:#111;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
 }
 </style>
 </head>
@@ -70,37 +60,45 @@ button {
 
 <header id="title">Anime Room</header>
 
-<div class="chat">
-  <div class="messages" id="messages"></div>
+<div class="container">
 
-  <div class="input-box">
-    <input id="text" placeholder="Write message..." />
-    <button onclick="send()">Send</button>
+  <div class="post-box">
+    <input id="msg" placeholder="Write something..." />
+    <button onclick="post()">Send</button>
   </div>
+
+  <div id="posts"></div>
+
 </div>
 
 <script>
-// отримуємо назву аніме з URL
-const params = new URLSearchParams(window.location.search);
-const anime = params.get("anime");
 
-document.getElementById("title").innerText = "⚡ " + anime + " Chat";
+const params = new URLSearchParams(location.search);
+const name = params.get("name");
 
-// простий локальний чат
-function send() {
-  const input = document.getElementById("text");
-  const msg = input.value;
+document.getElementById("title").innerText = "Discussion: " + name;
 
-  if (!msg) return;
+let key = "posts_" + name;
+let posts = JSON.parse(localStorage.getItem(key) || "[]");
 
-  const div = document.createElement("div");
-  div.className = "msg";
-  div.innerText = "You: " + msg;
-
-  document.getElementById("messages").appendChild(div);
-
-  input.value = "";
+function render() {
+  document.getElementById("posts").innerHTML =
+    posts.map(p => `<div class="post">${p}</div>`).join("");
 }
+
+function post() {
+  let text = document.getElementById("msg").value;
+  if(!text) return;
+
+  posts.push(text);
+  localStorage.setItem(key, JSON.stringify(posts));
+
+  document.getElementById("msg").value = "";
+  render();
+}
+
+render();
+
 </script>
 
 </body>
