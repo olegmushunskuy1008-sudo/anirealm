@@ -3,74 +3,105 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Anime Site</title>
+<title>AniTalk Forum</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
-  height: 100vh;
   font-family: 'Orbitron', sans-serif;
+  background: #0a0a0f;
   color: white;
-  overflow: hidden;
-  background: black;
 }
 
-/* anime moving background */
+/* neon background */
 .bg {
-  position: absolute;
+  position: fixed;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at 20% 20%, #ff00cc, transparent 40%),
-              radial-gradient(circle at 80% 30%, #00fff7, transparent 40%),
-              radial-gradient(circle at 50% 80%, #7a00ff, transparent 40%);
-  animation: move 10s infinite linear;
-  filter: blur(40px);
+  background: radial-gradient(circle at 20% 20%, #ff00cc55, transparent 40%),
+              radial-gradient(circle at 80% 30%, #00fff755, transparent 40%),
+              radial-gradient(circle at 50% 80%, #7a00ff55, transparent 40%);
+  filter: blur(60px);
+  animation: move 12s infinite linear;
+  z-index: 0;
 }
 
 @keyframes move {
   0% {transform: translate(0,0);}
-  50% {transform: translate(-10%, -10%);}
+  50% {transform: translate(-10%,-10%);}
   100% {transform: translate(0,0);}
+}
+
+header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-size: 40px;
+  color: #00fff7;
+  text-shadow: 0 0 20px #00fff7;
+}
+
+p {
+  opacity: 0.7;
 }
 
 .container {
   position: relative;
   z-index: 2;
-  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+/* anime cards */
+.card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px #ff00cc;
+}
+
+.card h2 {
+  color: #ff00cc;
+  font-size: 18px;
+}
+
+.card p {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.topbar {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.glow {
-  font-size: 40px;
-  text-shadow: 0 0 10px #ff00cc, 0 0 20px #00fff7;
-}
-
-.sub {
-  opacity: 0.8;
+  gap: 10px;
   margin-top: 10px;
 }
 
-.btn {
-  margin-top: 25px;
-  padding: 12px 25px;
+button {
+  padding: 10px 15px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #ff00cc, #00fff7);
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(90deg,#ff00cc,#00fff7);
   color: black;
   font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #ff00cc;
 }
 </style>
 </head>
@@ -79,10 +110,39 @@ body {
 
 <div class="bg"></div>
 
+<header>
+  <h1>⚡ AniTalk Forum ⚡</h1>
+  <p>Discuss your favorite anime with the world</p>
+
+  <div class="topbar">
+    <button>Home</button>
+    <button>Trending</button>
+    <button>Create Post</button>
+  </div>
+</header>
+
 <div class="container">
-  <div class="glow">⚡ ANIME WORLD ⚡</div>
-  <div class="sub">Welcome to your neon anime website</div>
-  <button class="btn">Enter</button>
+
+  <div class="card">
+    <h2>Jujutsu Kaisen</h2>
+    <p>Discuss Gojo, Sukuna, and latest fights</p>
+  </div>
+
+  <div class="card">
+    <h2>Naruto</h2>
+    <p>All about ninja world & clans</p>
+  </div>
+
+  <div class="card">
+    <h2>One Piece</h2>
+    <p>Straw Hat crew discussions</p>
+  </div>
+
+  <div class="card">
+    <h2>Attack on Titan</h2>
+    <p>Freedom, titans & theories</p>
+  </div>
+
 </div>
 
 </body>
