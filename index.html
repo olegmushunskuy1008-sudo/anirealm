@@ -3,76 +3,66 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AniTalk Anime Library</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<title>AniTalk PRO Database</title>
 
 <style>
 body {
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: Arial;
   background: #0a0a0f;
   color: white;
 }
 
-/* HERO */
 .hero {
-  height: 260px;
-  background: url("https://images.unsplash.com/photo-1522120692530-6c5ce0c1c7e9?auto=format&fit=crop&w=1600&q=80");
+  height: 250px;
+  background: url("https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=1600&q=80");
   background-size: cover;
   background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   position: relative;
 }
 
 .hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.6);
 }
 
 .hero h1 {
   position: relative;
   z-index: 2;
-  font-size: 42px;
   color: #00fff7;
+  font-size: 40px;
   text-shadow: 0 0 20px #00fff7;
 }
 
-/* SEARCH */
 .search {
-  text-align: center;
-  margin: 20px;
+  text-align:center;
+  margin:20px;
 }
 
 input {
-  padding: 12px 15px;
+  padding: 12px;
   width: 300px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
-  outline: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
 }
 
-/* GRID */
 .container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
   gap: 15px;
-  padding: 25px;
+  padding: 20px;
 }
 
-/* CARD */
 .card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 15px;
-  overflow: hidden;
-  transition: 0.3s;
+  background:#111;
+  border-radius: 12px;
+  overflow:hidden;
+  transition:0.3s;
 }
 
 .card:hover {
@@ -81,24 +71,21 @@ input {
 }
 
 .card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: 10px;
+  width:100%;
+  height:250px;
+  object-fit:cover;
 }
 
 .card h3 {
-  margin: 5px 0;
-  color: #ff00cc;
-  font-size: 15px;
+  margin:10px;
+  color:#ff00cc;
+  font-size:14px;
 }
 
 .card p {
-  font-size: 11px;
-  opacity: 0.7;
+  margin:10px;
+  font-size:11px;
+  opacity:0.7;
 }
 </style>
 </head>
@@ -106,7 +93,7 @@ input {
 <body>
 
 <div class="hero">
-  <h1>AniTalk Library</h1>
+  <h1>AniTalk Anime Library</h1>
 </div>
 
 <div class="search">
@@ -117,53 +104,47 @@ input {
 
 <script>
 
-// 🔥 AUTO GENERATE 1000+ ANIME
-const baseNames = [
-  "Jujutsu Kaisen","Naruto","One Piece","Attack on Titan","Demon Slayer",
-  "Death Note","Bleach","Tokyo Revengers","Chainsaw Man","My Hero Academia",
-  "Solo Leveling","Hunter x Hunter","Dragon Ball Z","Vinland Saga",
-  "Fullmetal Alchemist","Steins Gate","Black Clover","Blue Lock","Spy x Family",
-  "Sword Art Online","Tokyo Ghoul","Fairy Tail","Mob Psycho 100","Parasyte"
-];
+let animeList = [];
 
-// generate 1000 anime automatically
-const animeList = [];
+// 🔥 REAL 1000+ ANIME FROM API
+async function loadAnime(page = 1) {
+  const res = await fetch(`https://api.jikan.moe/v4/top/anime?page=${page}`);
+  const data = await res.json();
 
-for (let i = 0; i < 1000; i++) {
-  const name = baseNames[i % baseNames.length] + " " + (i + 1);
+  const mapped = data.data.map(a => ({
+    name: a.title,
+    img: a.images.jpg.image_url,
+    desc: a.synopsis ? a.synopsis.slice(0, 120) + "..." : "No description"
+  }));
 
-  animeList.push({
-    name: name,
-    desc: "Epic anime story, battles and emotions",
-    img: "https://picsum.photos/300/400?random=" + i
-  });
+  animeList = animeList.concat(mapped);
+
+  render(animeList);
+
+  // load 10 pages = ~1000 anime
+  if (page < 10) {
+    setTimeout(() => loadAnime(page + 1), 800); // avoid rate limit
+  }
 }
 
 const list = document.getElementById("list");
 
 function render(data) {
-  list.innerHTML = "";
-
-  data.forEach(a => {
-    list.innerHTML += `
-      <div class="card">
-        <img src="${a.img}" />
-        <div class="card-content">
-          <h3>${a.name}</h3>
-          <p>${a.desc}</p>
-        </div>
-      </div>
-    `;
-  });
+  list.innerHTML = data.map(a => `
+    <div class="card">
+      <img src="${a.img}" />
+      <h3>${a.name}</h3>
+      <p>${a.desc}</p>
+    </div>
+  `).join("");
 }
 
-render(animeList);
-
-// search
 document.getElementById("search").addEventListener("input", (e) => {
-  const val = e.target.value.toLowerCase();
-  render(animeList.filter(a => a.name.toLowerCase().includes(val)));
+  const v = e.target.value.toLowerCase();
+  render(animeList.filter(a => a.name.toLowerCase().includes(v)));
 });
+
+loadAnime();
 
 </script>
 
