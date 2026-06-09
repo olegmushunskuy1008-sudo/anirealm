@@ -87,21 +87,27 @@ p {
   opacity: 0.7;
 }
 
-.topbar {
+.nav {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 15px;
+  margin-top: 15px;
 }
 
-button {
+.nav button {
   padding: 10px 15px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  color: white;
   cursor: pointer;
-  background: linear-gradient(90deg,#ff00cc,#00fff7);
-  color: black;
-  font-weight: bold;
+  transition: 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.nav button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff00cc;
 }
 </style>
 </head>
@@ -111,10 +117,10 @@ button {
 <div class="bg"></div>
 
 <header>
-  <h1>⚡ AniTalk Forum ⚡</h1>
-  <p>Discuss your favorite anime with the world</p>
+  <h1>⚡ AniTalk ⚡</h1>
+  <p>Anime discussions in real time (soon)</p>
 
-  <div class="topbar">
+  <div class="nav">
     <button>Home</button>
     <button>Trending</button>
     <button>Create Post</button>
