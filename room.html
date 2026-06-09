@@ -74,10 +74,23 @@ button {
 <script>
 
 const params = new URLSearchParams(location.search);
-const name = params.get("name");
+
+/* 🔥 CLEAN NAME */
+function normalize(name) {
+  return (name || "")
+    .replace(/season\s*\d+/i, "")
+    .replace(/part\s*\d+/i, "")
+    .replace(/:\s.*$/g, "")
+    .replace(/\(.*?\)/g, "")
+    .trim();
+}
+
+const rawName = params.get("name") || "Unknown Anime";
+const name = normalize(rawName);
 
 document.getElementById("title").innerText = "Discussion: " + name;
 
+/* 🔥 CLEAN STORAGE KEY */
 let key = "posts_" + name;
 let posts = JSON.parse(localStorage.getItem(key) || "[]");
 
