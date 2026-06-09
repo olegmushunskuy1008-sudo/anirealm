@@ -44,7 +44,7 @@ header {
 }
 
 h1 {
-  font-size: 40px;
+  font-size: 42px;
   color: #00fff7;
   text-shadow: 0 0 20px #00fff7;
 }
@@ -76,6 +76,7 @@ input::placeholder {
   justify-content: center;
   gap: 15px;
   margin-top: 15px;
+  flex-wrap: wrap;
 }
 
 .nav button {
@@ -94,14 +95,23 @@ input::placeholder {
   box-shadow: 0 0 20px #ff00cc;
 }
 
+/* SECTIONS */
+.section-title {
+  margin: 40px 0 10px;
+  text-align: center;
+  font-size: 22px;
+  color: #ff00cc;
+  text-shadow: 0 0 10px #ff00cc;
+}
+
 /* GRID */
 .container {
   position: relative;
   z-index: 2;
+  padding: 20px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  padding: 40px;
 }
 
 /* CARD */
@@ -147,22 +157,19 @@ input::placeholder {
   <input id="search" placeholder="Search anime..." />
 
   <div class="nav">
-    <button onclick="location.reload()">Home</button>
-    <button onclick="alert('Trending soon')">Trending</button>
-    <button onclick="alert('Create post coming soon')">Create Post</button>
+    <button onclick="scrollToSection('popular')">Popular</button>
+    <button onclick="scrollToSection('action')">Action</button>
+    <button onclick="location.reload()">Reset</button>
   </div>
 </header>
+
+<h2 class="section-title" id="popular">🔥 Popular</h2>
 
 <div class="container">
 
 <a class="card" href="room.html?anime=Jujutsu%20Kaisen">
   <h2>Jujutsu Kaisen</h2>
   <p>Gojo, Sukuna, curses</p>
-</a>
-
-<a class="card" href="room.html?anime=Naruto">
-  <h2>Naruto</h2>
-  <p>Ninja world & Hokage</p>
 </a>
 
 <a class="card" href="room.html?anime=One%20Piece">
@@ -175,29 +182,25 @@ input::placeholder {
   <p>Titans & freedom</p>
 </a>
 
-<a class="card" href="room.html?anime=Demon%20Slayer">
-  <h2>Demon Slayer</h2>
-  <p>Tanjiro & Hashira</p>
-</a>
-
 <a class="card" href="room.html?anime=Death%20Note">
   <h2>Death Note</h2>
   <p>Light vs L</p>
 </a>
 
-<a class="card" href="room.html?anime=Bleach">
-  <h2>Bleach</h2>
-  <p>Soul Reapers</p>
+</div>
+
+<h2 class="section-title" id="action">⚔️ Action</h2>
+
+<div class="container">
+
+<a class="card" href="room.html?anime=Naruto">
+  <h2>Naruto</h2>
+  <p>Ninja world & Hokage</p>
 </a>
 
-<a class="card" href="room.html?anime=Tokyo%20Revengers">
-  <h2>Tokyo Revengers</h2>
-  <p>Time travel gangs</p>
-</a>
-
-<a class="card" href="room.html?anime=Chainsaw%20Man">
-  <h2>Chainsaw Man</h2>
-  <p>Denji & devils</p>
+<a class="card" href="room.html?anime=Demon%20Slayer">
+  <h2>Demon Slayer</h2>
+  <p>Tanjiro & Hashira</p>
 </a>
 
 <a class="card" href="room.html?anime=My%20Hero%20Academia">
@@ -205,24 +208,14 @@ input::placeholder {
   <p>Heroes & quirks</p>
 </a>
 
+<a class="card" href="room.html?anime=Chainsaw%20Man">
+  <h2>Chainsaw Man</h2>
+  <p>Denji & devils</p>
+</a>
+
 <a class="card" href="room.html?anime=Solo%20Leveling">
   <h2>Solo Leveling</h2>
   <p>Sung Jin-Woo rise</p>
-</a>
-
-<a class="card" href="room.html?anime=Hunter%20x%20Hunter">
-  <h2>Hunter x Hunter</h2>
-  <p>Gon & Killua</p>
-</a>
-
-<a class="card" href="room.html?anime=Dragon%20Ball%20Z">
-  <h2>Dragon Ball Z</h2>
-  <p>Goku & Saiyans</p>
-</a>
-
-<a class="card" href="room.html?anime=Vinland%20Saga">
-  <h2>Vinland Saga</h2>
-  <p>Vikings & revenge</p>
 </a>
 
 </div>
@@ -236,14 +229,13 @@ search.addEventListener("input", () => {
 
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
-
-    if (text.includes(value)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    card.style.display = text.includes(value) ? "block" : "none";
   });
 });
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({behavior: "smooth"});
+}
 </script>
 
 </body>
