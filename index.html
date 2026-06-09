@@ -49,6 +49,8 @@ body {
   overflow:hidden;
   cursor:pointer;
   transition:0.3s;
+  text-decoration:none;
+  color:white;
 }
 
 .card:hover {
@@ -86,16 +88,38 @@ body {
 
 let animeList = [];
 
+/* 🔥 NORMALIZATION FUNCTION */
+function normalize(name) {
+  return name
+    .replace(/season\s*\d+/i, "")
+    .replace(/part\s*\d+/i, "")
+    .replace(/:\s.*$/g, "")
+    .replace(/\(.*?\)/g, "")
+    .trim();
+}
+
 async function load() {
   const res = await fetch("https://api.jikan.moe/v4/top/anime?page=1");
   const data = await res.json();
 
-  animeList = data.data.map(a => ({
-    id: a.mal_id,
-    name: a.title,
-    img: a.images.jpg.image_url,
-    desc: a.synopsis ? a.synopsis.slice(0, 100) : "No description"
-  }));
+  let seen = new Map(); // 🔥 removes duplicates
+
+  animeList = data.data.map(a => {
+    const cleanName = normalize(a.title);
+
+    if (!seen.has(cleanName)) {
+      seen.set(cleanName, true);
+
+      return {
+        id: a.mal_id,
+        name: cleanName,
+        img: a.images.jpg.image_url,
+        desc: a.synopsis ? a.synopsis.slice(0, 90) : "No description"
+      };
+    }
+
+    return null;
+  }).filter(Boolean);
 
   render();
 }
