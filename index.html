@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AniTalk PRO Database</title>
+<title>AniTalk NEXT</title>
 
 <style>
 body {
@@ -14,10 +14,9 @@ body {
 }
 
 .hero {
-  height: 250px;
+  height: 240px;
   background: url("https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=1600&q=80");
   background-size: cover;
-  background-position: center;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -28,63 +27,48 @@ body {
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.6);
 }
 
 .hero h1 {
   position: relative;
   z-index: 2;
-  color: #00fff7;
-  font-size: 40px;
-  text-shadow: 0 0 20px #00fff7;
-}
-
-.search {
-  text-align:center;
-  margin:20px;
-}
-
-input {
-  padding: 12px;
-  width: 300px;
-  border-radius: 10px;
-  border: none;
+  color:#00fff7;
 }
 
 .container {
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-  gap: 15px;
-  padding: 20px;
+  gap:15px;
+  padding:20px;
 }
 
 .card {
   background:#111;
-  border-radius: 12px;
+  border-radius:12px;
   overflow:hidden;
+  cursor:pointer;
   transition:0.3s;
 }
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px #ff00cc;
 }
 
 .card img {
   width:100%;
-  height:250px;
+  height:220px;
   object-fit:cover;
 }
 
 .card h3 {
   margin:10px;
   color:#ff00cc;
-  font-size:14px;
 }
 
 .card p {
   margin:10px;
-  font-size:11px;
+  font-size:12px;
   opacity:0.7;
 }
 </style>
@@ -93,11 +77,7 @@ input {
 <body>
 
 <div class="hero">
-  <h1>AniTalk Anime Library</h1>
-</div>
-
-<div class="search">
-  <input id="search" placeholder="Search anime..." />
+  <h1>AniTalk NEXT</h1>
 </div>
 
 <div class="container" id="list"></div>
@@ -106,45 +86,32 @@ input {
 
 let animeList = [];
 
-// 🔥 REAL 1000+ ANIME FROM API
-async function loadAnime(page = 1) {
-  const res = await fetch(`https://api.jikan.moe/v4/top/anime?page=${page}`);
+async function load() {
+  const res = await fetch("https://api.jikan.moe/v4/top/anime?page=1");
   const data = await res.json();
 
-  const mapped = data.data.map(a => ({
+  animeList = data.data.map(a => ({
+    id: a.mal_id,
     name: a.title,
     img: a.images.jpg.image_url,
-    desc: a.synopsis ? a.synopsis.slice(0, 120) + "..." : "No description"
+    desc: a.synopsis ? a.synopsis.slice(0, 100) : "No description"
   }));
 
-  animeList = animeList.concat(mapped);
-
-  render(animeList);
-
-  // load 10 pages = ~1000 anime
-  if (page < 10) {
-    setTimeout(() => loadAnime(page + 1), 800); // avoid rate limit
-  }
+  render();
 }
 
-const list = document.getElementById("list");
-
-function render(data) {
-  list.innerHTML = data.map(a => `
-    <div class="card">
-      <img src="${a.img}" />
-      <h3>${a.name}</h3>
-      <p>${a.desc}</p>
-    </div>
-  `).join("");
+function render() {
+  document.getElementById("list").innerHTML =
+    animeList.map(a => `
+      <a class="card" href="room.html?id=${a.id}&name=${encodeURIComponent(a.name)}">
+        <img src="${a.img}">
+        <h3>${a.name}</h3>
+        <p>${a.desc}</p>
+      </a>
+    `).join("");
 }
 
-document.getElementById("search").addEventListener("input", (e) => {
-  const v = e.target.value.toLowerCase();
-  render(animeList.filter(a => a.name.toLowerCase().includes(v)));
-});
-
-loadAnime();
+load();
 
 </script>
 
